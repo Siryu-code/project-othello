@@ -1,20 +1,50 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Othello (ES5)</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<h1>Othello</h1>
-<div class="score">
-  <div class="p" id="pb"><span class="dot b"></span>Hitam<b id="sb">2</b></div>
-  <div class="p" id="pw"><span class="dot w"></span>Putih<b id="sw">2</b></div>
-</div>
-<div id="board"></div>
-<div id="msg"></div>
-<button class="r" id="reset">Main lagi</button>
-<script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Othello (ES5)</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="setup" class="setup">
+      <h1>Othello</h1>
+      <h2>pilih Mode</h2>
+      <div class="opts">
+        <button class="opt" data-mode="two">Dua Pemain</button>
+        <button class="opt sel" data-mode="black">Sebagai Hitam</button>
+        <button class="opt" data-mode="white">Sebagai Putih</button>
+      </div>
+      <div id="levelBox">
+        <h2>pilih level</h2>
+        <div class="opts">
+          <button class="opt sel" data-level="easy">Easy</button>
+          <button class="opt" data-level="medium">Medium</button>
+          <button class="opt" data-level="hard">Hard</button>
+        </div>
+      </div>
+      <button class="r" id="start">Mulai</button>
+    </div>
+    <div id="game" class="hidden">
+      <h1>Othello</h1>
+      <div class="score">
+        <div class="p" id="pb">
+          <span class="dot b"></span>Hitam<b id="sb">2</b>
+        </div>
+        <div class="p" id="pw">
+          <span class="dot w"></span>Putih<b id="sw">2</b>
+        </div>
+      </div>
+      <div id="board"></div>
+      <div id="msg"></div>
+      <div class="btns">
+        <button class="r" id="reset">Main lagi</button>
+        <button class="r" id="menu">Ubah Pengaturan</button>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
 </html>

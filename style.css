@@ -19,3 +19,11 @@ h1{margin:0;font-size:1.9rem;letter-spacing:.04em}
 #msg{min-height:1.5em;text-align:center;color:var(--muted)}
 button.r{font:inherit;padding:10px 22px;border-radius:8px;border:2px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
 button.r:hover{background:var(--ink);color:var(--bg)}
+#game{display:flex;flex-direction:column;align-items:center;gap:18px}
+.hidden{display:none !important}
+.setup{display:flex;flex-direction:column;align-items:center;gap:14px;width:min(92vw,480px)}
+.setup h2{margin:0;font-size:.9rem;font-weight:normal;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.opts,.btns{display:flex;gap:10px;width:100%;justify-content:center}
+.opt{flex:1;font:inherit;padding:12px 8px;border-radius:8px;border:2px solid var(--muted);background:transparent;color:var(--ink);cursor:pointer}
+.opt:hover{border-color:var(--ink)}
+.opt.sel{border-color:var(--ink);background:var(--ink);color:var(--bg)}

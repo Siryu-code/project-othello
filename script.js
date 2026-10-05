@@ -10,6 +10,11 @@ var DIRS = [
   [1, 1],
 ];
 var grid, turn, over;
+var mode, aiColor, level;
+var aiTimer;
+
+mode = "black";
+level = "easy"
 
 function $(id) {
   return document.getElementById(id);
@@ -24,6 +29,7 @@ function inside(y, x) {
 }
 
 function init() {
+  clearTimeout(aiTimer);
   grid = [];
   for (var r = 0; r < N; r++) {
     grid.push([]);
@@ -36,6 +42,7 @@ function init() {
   turn = 1;
   over = false;
   render("");
+  maybeAITurn();
 }
 
 // Mengembalikan daftar bidak lawan yang akan terbalik jika pemain p menaruh di (r,c)
@@ -69,6 +76,94 @@ function hasMove(p) {
   return false;
 }
 
+function validMoves(p) {
+  var moves = [];
+  for (var r = 0; r < N; r++) {
+    for (var c = 0; c < N; c++) {
+      if (flips(r, c, p).length > 0) {
+        moves.push([r, c]);
+      }
+    }
+  }
+  return moves;
+}
+
+function pickMove(moves) {
+  var randomIndex = Math.floor(Math.random() * moves.length);
+  return moves[randomIndex];
+}
+
+function maybeAITurn() {
+  if (over || turn !== aiColor) return;
+
+  aiTimer = setTimeout(function () {
+    if (over || turn !== aiColor) return;
+
+    var moves = validMoves(aiColor);
+    var move = pickMove(moves);
+
+    if (move) {
+      play(move[0], move[1]);
+    }
+  }, 600);
+}
+
+function bindOpt(btn) {
+  btn.onclick = function () {
+    var siblings = btn.parentElement.querySelectorAll(".opt");
+
+    for (var i = 0; i < siblings.length; i++) {
+      siblings[i].classList.remove('sel');
+    }
+
+    btn.classList.add("sel");
+
+    var modeVal = btn.getAttribute("data-mode");
+    var levelVal = btn.getAttribute("data-level");
+
+    if (modeVal !== null) {
+      mode = modeVal;
+
+      var levelBox = document.getElementById("levelBox");
+      if (mode === "two") {
+        levelBox.classList.add('hidden');
+      } else {
+        levelBox.classList.remove("hidden");
+      }
+    }
+
+    if (levelVal !== null) {
+      level = levelVal;
+    }
+  };
+}
+
+var optButtons = document.querySelectorAll(".opt");
+for (var i = 0; i < optButtons.length; i++) {
+  bindOpt(optButtons[i]);
+}
+
+document.getElementById("start").onclick = function () {
+  if (mode === "two") {
+    aiColor = 0;
+  } else if (mode === "black") {
+    aiColor = 2;
+  } else if (mode === "white") {
+    aiColor = 1;
+  }
+  document.getElementById("setup").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+
+  init();
+};
+
+document.getElementById("menu").onclick = function () {
+  clearTimeout(aiTimer);
+
+  document.getElementById("setup").classList.remove("hidden");
+  document.getElementById("game").classList.add("hidden");
+};
+
 function play(r, c) {
   if (over) return;
   var f = flips(r, c, turn);
@@ -87,6 +182,7 @@ function play(r, c) {
     over = true;
   }
   render(note);
+  maybeAITurn();
 }
 
 function setOn(el, on) {
@@ -96,20 +192,25 @@ function setOn(el, on) {
 
 // Fungsi terpisah supaya r dan c "terkunci" untuk tiap tombol (hindari masalah closure di dalam loop var)
 function makeCell(r, c) {
+
   var v = grid[r][c];
   var cell = document.createElement("button");
   cell.className = "c";
   cell.setAttribute("role", "gridcell");
   cell.setAttribute("aria-label", "Baris " + (r + 1) + " kolom " + (c + 1));
+  
   if (v) {
     var d = document.createElement("span");
     d.className = "d " + (v === 1 ? "b" : "w");
     cell.appendChild(d);
-  } else if (!over && flips(r, c, turn).length > 0) {
+  } else if (!over && turn !== aiColor && flips(r, c, turn).length > 0) {
     cell.classList.add("ok");
   }
+
   cell.onclick = function () {
-    play(r, c);
+    if (turn !== aiColor) {
+      play(r, c);
+    }
   };
   return cell;
 }
@@ -148,4 +249,3 @@ function render(note) {
 }
 
 $("reset").onclick = init;
-init();
